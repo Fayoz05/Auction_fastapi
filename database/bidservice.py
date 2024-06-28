@@ -65,10 +65,15 @@ def greater_bid_db(user_id, auction_item_id, plus_bid):
 def lower_bid_db(user_id, auction_item_id, minus_bid):
     db = next(get_db())
     existing_bid = db.query(Bid).filter_by(user_id=user_id, auction_item_id=auction_item_id).first()
+    auction_item = db.query(AuctionItem).filter_by(id=auction_item_id).first()
     if existing_bid:
+        auction_item = db.query(AuctionItem).filter_by(id=auction_item_id).first()
         existing_bid.bid_amount -= minus_bid
-        db.commit()
-        return f'Ваша ставка уменьшилась на {minus_bid} и теперь она {existing_bid.bid_amount}'
+        if existing_bid.bid_amount < auction_item.starting_bid:
+            return f'Ваше уменьшение ставки не валидна'
+        else:
+            db.commit()
+            return f'Ваша ставка уменьшилась на {minus_bid} и теперь она {existing_bid.bid_amount}'
     return 'Вы не создали ставку так что не можете ее уменьшить'
 
 
