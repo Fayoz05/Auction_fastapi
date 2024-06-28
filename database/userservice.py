@@ -93,7 +93,6 @@ def delete_user_db(user_id):
     return 'Пользователь не найден'
 
 
-
 # Получение данных определенного пользователя
 def get_profile_db(id):
     db = next(get_db())
