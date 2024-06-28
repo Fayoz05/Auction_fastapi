@@ -1,4 +1,4 @@
-from database.models import User
+from database.models import User,Bid
 from database import get_db
 from datetime import datetime, timedelta
 
@@ -79,14 +79,19 @@ def change_user_password_db(id, new_password):
 
 
 # Удаление пользователя logout
-def delete_user_db(id):
+def delete_user_db(user_id):
     db = next(get_db())
-    user = db.query(User).filter_by(id=id).first()
+    user = db.query(User).filter_by(id=user_id).first()
     if user:
+        bids = db.query(Bid).filter_by(user_id=user_id).all()
+        if bids:
+            for bid in bids:
+                db.delete(bid)
         db.delete(user)
         db.commit()
-        return f'Пользователь удален'
-    return False
+        return 'Пользователь удален'
+    return 'Пользователь не найден'
+
 
 
 # Получение данных определенного пользователя
