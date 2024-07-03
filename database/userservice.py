@@ -1,4 +1,4 @@
-from database.models import User,Bid
+from database.models import User, Bid
 from database import get_db
 from datetime import datetime, timedelta
 
@@ -91,7 +91,6 @@ def delete_user_db(user_id):
         db.commit()
         return 'Пользователь удален'
     return 'Пользователь не найден'
-
 
 
 # Получение данных определенного пользователя
